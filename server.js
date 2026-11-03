@@ -26,7 +26,6 @@ const taskSchema = new mongoose.Schema({
   dateCreated: { type: Date, default: Date.now }
 }, { versionKey: false });
 
-// Explicit collection names ensure the routes and database use users / tasks.
 const User = mongoose.model('User', userSchema, 'users');
 const Task = mongoose.model('Task', taskSchema, 'tasks');
 
@@ -83,7 +82,6 @@ function readTaskBody(body) {
     bad('assignedUser must be a valid user ID or an empty string.');
   }
   const assignedUserName = optionalString(body, 'assignedUserName', undefined);
-  // Check invalid field values before checking existence of referenced IDs.
   if (assignedUser === '' && assignedUserName !== undefined && assignedUserName !== 'unassigned') {
     bad('An unassigned task must use assignedUserName "unassigned".');
   }
@@ -143,7 +141,6 @@ async function transaction(action) {
   }
 }
 async function existingById(Model, id, label, session) {
-  // URL id validity and existence take precedence over body validation.
   if (!isId(id)) missing(`${label} not found.`);
   const doc = await Model.findById(id).session(session || null);
   if (!doc) missing(`${label} not found.`);
@@ -162,26 +159,21 @@ async function verifyPendingTasks(taskIds, session) {
   if (tasks.length !== taskIds.length) missing('One or more referenced tasks do not exist.');
 }
 
-// For both POST /users and PUT /users/:id, synchronize every affected task.
 async function synchronizeUser(user, newPending, session) {
   const userId = String(user._id);
   const newSet = new Set(newPending);
-  // Unassign pending tasks omitted from the new list; completed tasks keep
-  // their association with the user even though they are not pending.
   await Task.updateMany(
     { assignedUser: userId, completed: false,
       _id: { $nin: newPending } },
     { $set: { assignedUser: '', assignedUserName: 'unassigned' } },
     { session }
   );
-  // Rename every task still assigned to this user, including completed tasks.
   await Task.updateMany(
     { assignedUser: userId },
     { $set: { assignedUserName: user.name } },
     { session }
   );
   if (newSet.size) {
-    // Tasks may have been assigned to another user: remove the reverse link.
     await User.updateMany(
       { _id: { $ne: user._id }, pendingTasks: { $in: newPending } },
       { $pull: { pendingTasks: { $in: newPending } } },
@@ -206,7 +198,6 @@ async function resolveAssignee(taskBody, session) {
 }
 async function synchronizeTask(task, session) {
   const taskId = String(task._id);
-  // Clean any old reverse association, including one from another user.
   await User.updateMany(
     { pendingTasks: taskId },
     { $pull: { pendingTasks: taskId } },
@@ -221,7 +212,6 @@ async function synchronizeTask(task, session) {
   }
 }
 
-// COLLECTION GET: all query operations run in MongoDB through Mongoose.
 function collectionGet(Model, defaultLimit) {
   return asyncRoute(async (req, res) => {
     const where = parseObjectQuery(req.query.where, 'where') || {};
@@ -344,7 +334,6 @@ app.delete('/api/users/:id', asyncRoute(async (req, res) => {
 app.get('/', (req, res) => ok(res, { status: 'running' }, 200, 'API online.'));
 app.use('/api', (req, res) => res.status(404).json({ message: 'Endpoint not found.', data: null }));
 
-// All API errors have a client-safe, predictable shape.
 app.use((err, req, res, next) => {
   if (err instanceof ApiError) {
     return res.status(err.status).json({ message: err.message, data: null });
@@ -365,7 +354,6 @@ const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI || process.
 async function main() {
   if (!MONGODB_URI) throw new Error('Set MONGODB_URI in .env or your Render environment.');
   await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 15000 });
-  // Create collections / unique index outside transactions, for new Atlas DBs.
   await User.init();
   await Task.init();
   app.listen(PORT, '0.0.0.0', () => console.log(`API listening on port ${PORT}`));
