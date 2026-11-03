@@ -1,0 +1,1476 @@
+﻿conversation,message_number,role,content,source_pages,source_file
+Explain MP2 Situation,1,user,tell me the whole picture about mp2 in english,1,Explain MP2 Situation.pdf
+Explain MP2 Situation,2,assistant,"The Whole Picture of CS409 MP2
+Here is a complete overview of your CS409 MP2 situation, including what happened, why you
+lost points, the evidence you have, and what you can do next.
+1. What happened?
+You completed your CS409 MP2 project and recorded a demonstration video before the
+October 6, 2026 deadline.
+However, when submitting your assignment, you accidentally provided the wrong video link.
+As a result, you received a 20-point deduction.
+The important distinction is that this was a submission problem, not necessarily a problem with
+your actual implementation.
+2. Why did this happen?
+According to the explanation you prepared for your teaching assistant, several circumstances
+contributed to the mistake.
+     Family medical emergency: A close family member experienced an unexpected medical
+     emergency, which caused significant stress.
+     Unstable internet connection: Your home Wi-Fi was unreliable, making the video-
+     uploading process more difficult.
+     Computer problems: You were also experiencing technical difficulties with your computer.
+     Submission oversight: Because of these circumstances, you failed to notice that the
+     submitted video link was incorrect.
+These circumstances help explain the mistake, although they do not automatically guarantee
+that the instructor will reverse the deduction.
+
+3. What evidence do you have?
+Your strongest argument is that you had already completed the required work before the
+deadline.
+Evidence                                       What it demonstrates
+Original demonstration video dated October 6   The correct video existed by the deadline
+Google Drive timestamps                        Potentially verify when the video was created or uploaded
+GitHub commit history                          Shows the project's development and completion timeline
+Your original submission                       Helps distinguish a wrong-link mistake from missing work
+The video timestamp and GitHub history are especially important because they provide
+independently verifiable evidence.
+4. What have you done so far?
+You drafted an email to TA Carl Guo, titled Request for Reconsideration of MP2 Grade Due to
+Family Emergency.
+In that email, you explained the circumstances, apologized for the incorrect link, and
+emphasized that the correct video and project had been completed before the deadline.
+You also offered supporting evidence, including the original Google Drive video and GitHub
+commit history.
+I know the appeal was prepared, but I don't have a confirmed final decision from the TA.
+5. What outcome can you reasonably expect?
+There are three main possibilities.
+Best case: The TA accepts your evidence and restores all 20 points.
+Middle case: The TA recognizes that you completed the project on time and grants partial
+credit back.
+Worst case: The TA enforces the original submission policy and keeps the 20-point deduction.
+
+The outcome will depend on the course's submission rules and whether the instructor has
+discretion to reconsider a technical submission mistake.
+6. What should you do next?
+Your strongest next step is to follow up with TA Carl if you haven't received a response. Keep
+the message professional, attach or link the supporting evidence, and ask whether the incorrect
+video link can be reconsidered given that the correct demonstration was recorded before the
+deadline.
+The key message is:
+  I am not asking for additional time to complete unfinished work. I am asking whether my
+  original work, which was completed before the deadline, can be evaluated despite my mistake
+  in submitting the video link.
+That is the central argument of your appeal.
+Overall: Your CS409 MP2 issue is a 20-point grading dispute caused by an incorrect
+demonstration-video link. Your goal is to demonstrate that the work was completed on time and
+request reconsideration based on verifiable evidence and the exceptional circumstances
+surrounding your submission.",1-3,Explain MP2 Situation.pdf
+Explain MP2 Situation,3,user,"give me the whole stucture and how to implement it (not direct
+                               answer)",3,Explain MP2 Situation.pdf
+Explain MP2 Situation,4,assistant,"CS409 MP2 — Complete Architecture and Implementation Guide
+Project: Pokémon Explorer (using PokéAPI)
+Technology stack: React + TypeScript + Vite + Axios + React Router + CSS
+Goal: Build a functional, interactive website that retrieves Pokémon data from a real API, lets
+users explore it in different ways, and provides detailed information about individual Pokémon.
+
+I'll explain the entire project from a software engineering perspective: what each part does,
+how the pieces communicate, and how you would implement them yourself. I won't provide a
+ready-to-submit solution.
+1. The big picture
+Your MP2 is primarily a frontend application powered by an external API.
+
+                             User / Web Browser
+                           Search · Sort · Filter · Navigate
+
+
+                               React Application
+                        Pages · Components · State · Router
+
+
+                              API Service (Axios)
+                     HTTP GET · JSON · Data transformation
+
+
+                                        PokéAPI
+                            Remote Pokémon information
+                              The data flow of your MP2 application
+Think of these as four layers:
+ 1. User interface: What the user sees and interacts with.
+ 2. React logic: Controls interactions, state, and navigation.
+ 3. API service: Requests information from PokéAPI and prepares it for the UI.
+
+ 4. External API: Provides the actual Pokémon data.
+You do not need to create your own Pokémon database or backend server for this architecture.
+2. Your three main pages
+                     A. List View
+                     Displays Pokémon in a structured list. Users search by name, sort by at
+                     least two attributes, and switch between ascending and descending order.
+
+                     B. Gallery View
+                     Displays Pokémon as visual cards with images. Users can filter the cards
+                     by a Pokémon attribute, such as type.
+
+                     C. Detail View
+                     Displays one Pokémon's full information and provides Previous and Next
+                     navigation. Each Pokémon should have its own navigable URL.
+
+These are visual examples of the three interface patterns, not screenshots of your
+implementation.
+3. Project file structure
+Here is a clean architecture you can use to understand how the project should be organized. It
+is a suggested structure, not a claim about your repository's exact existing files.
+mp2/
+├── .github/
+│   └── workflows/
+│        └── deploy.yml
+│
+├── public/
+│
+├── src/
+
+│    ├── main.tsx
+│    ├── App.tsx
+│    │
+│    ├── pages/
+│    │        ├── ListView.tsx
+│    │        ├── GalleryView.tsx
+│    │        └── DetailView.tsx
+│    │
+│    ├── components/
+│    │        ├── Navbar.tsx
+│    │        ├── SearchBar.tsx
+│    │        ├── SortControls.tsx
+│    │        ├── FilterControls.tsx
+│    │        ├── PokemonCard.tsx
+│    │        └── LoadingState.tsx
+│    │
+│    ├── services/
+│    │        └── pokemonApi.ts
+│    │
+│    ├── types/
+│    │        └── pokemon.ts
+│    │
+│    └── styles/
+│             └── main.css
+│
+├── index.html
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── vite.config.ts
+
+
+Each folder has one responsibility:
+Folder/file                            Purpose
+pages/                                 Three main screens
+components/                            Reusable interface elements
+services/                              API communication
+types/                                 TypeScript data definitions
+
+styles/                               CSS layout and appearance
+App.tsx                               Routing and shared layout
+main.tsx                              React entry point
+vite.config.ts                        Build and hosting configuration
+This is called separation of concerns: instead of putting everything into one large file, each part
+of the application handles a specific job.
+4. How the API works
+The PokéAPI provides data through HTTP requests.
+You need to understand two different kinds of requests.
+Request A — Get a list of Pokémon
+GET https://pokeapi.co/api/v2/pokemon?limit=20&offset=0
+
+
+The response contains a list of Pokémon names and URLs, but not all their detailed information.
+Request B — Get one Pokémon
+GET https://pokeapi.co/api/v2/pokemon/25
+
+
+The response provides information about that Pokémon, including its ID, name, images, types,
+abilities, height, weight, and battle statistics. PokéAPI
+ Try the API response
+                   List endpoint                                    Detail endpoint
+ {
+     ""count"": 1350,
+     ""next"": ""..."",
+     ""results"": [
+       {
+           ""name"": ""bulbasaur"",
+
+              ""url"": "".../pokemon/1/""
+         },
+         {
+              ""name"": ""ivysaur"",
+              ""url"": "".../pokemon/2/""
+         }
+     ]
+ }
+
+
+ Illustrative shortened response. The count and omitted fields are not a live response.
+                                     Open actual JSON response
+
+An important implementation challenge is that the list endpoint does not include every field
+needed for sorting and filtering. For example, if you want to sort by weight, you must first
+obtain weight data for the relevant Pokémon.
+Your implementation should therefore:
+ 1. Request a list of Pokémon.
+ 2. Retrieve the details needed for the chosen dataset.
+ 3. Transform the responses into a consistent data structure.
+ 4. Store that data in React state.
+ 5. Use the prepared data for searching, sorting, filtering, and rendering.
+Avoid requesting every Pokémon simultaneously. Work with a bounded collection, pagination, or
+controlled batches, depending on the assignment requirements.
+5. How React manages everything
+You need to understand three concepts: components, state, and effects.
+Components
+A component is a reusable piece of the interface.
+For example, the PokemonCard component may display a Pokémon's image, name, ID, and
+type.
+The Gallery View can reuse that same component many times, passing different Pokémon
+information as props.
+
+State
+State is information that can change while a user interacts with the application.
+Examples:
+     pokemon : the currently loaded collection.
+     searchQuery : the user's search text.
+     sortKey : the selected sorting attribute.
+     sortDirection : ascending or descending.
+     selectedType : the active gallery filter.
+     loading : whether data is being fetched.
+     error : whether the request failed.
+
+React's useState lets a component remember these values across renders.
+Effects
+useEffect    is commonly used to synchronize data fetching with component lifecycle or
+changes to a dependency.
+For example, when the Detail View opens with a different Pokémon ID, it should request the
+information for that new ID.
+You must also consider cleanup or stale requests if users navigate quickly.
+6. How to implement the three views
+List View — Search and sorting
+The List View transforms an array of Pokémon into a table or list.
+The processing pipeline looks like this:
+                                       Loaded Pokémon data
+
+                                        Apply search query
+
+                                       Apply sorting choice
+
+                                       Render visible results
+
+For search, consider what happens if a user types ""pika"" .
+You should compare the search string with each Pokémon's name, generally ignoring
+capitalization.
+For sorting, you need a comparator that compares the selected attribute for two Pokémon.
+Conceptual pseudocode:
+when user changes search or sorting:
+
+
+     begin with the loaded Pokemon collection
+
+
+     keep Pokemon matching the search text
+
+
+     compare Pokemon by the selected attribute
+
+
+     reverse the comparison direction if needed
+
+
+     display the resulting collection
+
+
+A key detail: avoid mutating the original state array when sorting. Derive a sorted copy or
+memoized result.
+Gallery View — Cards and filtering
+The Gallery View uses the same underlying Pokémon data but displays it differently.
+For example, consider this filter:
+ Interactive filtering example
+     All        Grass       Fire       Water         Electric
+
+                     Bulbasaur                                             Charmander
+                 #001 · Grass, Poison                                        #004 · Fire
+
+
+
+
+                       Squirtle                                               Pikachu
+                     #007 · Water                                           #025 · Electric
+ Conceptual filter interaction using a small sample dataset; the illustration is not a live API image.
+When implementing this:
+   Store the selected filter in state.
+   Check each Pokémon's types array.
+   Keep Pokémon whose types contain the selected value.
+   Render the filtered collection as cards.
+   Make each card navigate to the corresponding detail page.
+Detail View — Dynamic routes
+Your routes should conceptually look like:
+/mp2/                         → List View
+/mp2/gallery                    → Gallery View
+/mp2/pokemon/25                 → Detail View for Pokémon 25
+
+
+The /mp2 prefix is your GitHub Pages hosting path; it can be managed through router
+configuration rather than manually repeated in every route.
+When visiting a Pokémon detail route:
+ 1. React Router identifies the route parameter.
+ 2. The Detail View extracts the Pokémon ID.
+
+  3. The API service retrieves the Pokémon's information.
+  4. The page displays the information.
+  5. Previous and Next buttons navigate to adjacent valid IDs.
+Remember that IDs can have gaps and not every numerical ID is guaranteed to correspond to a
+valid Pokémon entry. Handle missing records gracefully.
+7. How to deploy using GitHub Pages
+Your project is hosted at:
+Your MP2 deployed site
+The source repository is:
+Your MP2 GitHub repository
+The deployment process is:
+       Write React + TypeScript code
+
+       Run the Vite production build
+
+       Commit and push to GitHub
+
+       GitHub Actions builds and deploys
+
+       GitHub Pages serves the website
+
+Vite's base must match the repository's subpath ( /mp2/ ), and React Router must account for
+the same hosting prefix. Keep the existing .github/workflows/deploy.yml file as required
+by the assignment. Vite
+One subtle problem: GitHub Pages does not automatically provide React Router's history
+fallback for direct visits to nested URLs. Your app may navigate successfully from the
+homepage yet fail on refresh at /mp2/pokemon/25 . Plan a compatible routing or fallback
+
+strategy and test direct links.
+8. Recommended implementation order
+Here is a practical checklist you can work through yourself.
+ MP2 learning and implementation plan                          0/16 completed
+
+ 1. Foundation
+      Understand React components and props
+      Set up routing between the three pages
+      Define your TypeScript Pokémon data model
+
+ 2. API integration
+     Fetch a Pokémon list with Axios
+     Fetch individual Pokémon details
+     Handle loading, errors, and missing data
+
+ 3. List and gallery
+      Implement live search
+      Implement two sort attributes and both directions
+      Implement image cards and attribute filtering
+
+ 4. Detail and navigation
+     Implement dynamic Pokémon URLs
+     Display detailed Pokémon attributes
+     Add Previous and Next navigation
+
+ 5. Finish and verify
+      Add responsive CSS
+
+       Check direct URLs and error cases
+       Build and test GitHub Pages deployment
+       Record and verify the demonstration video
+
+9. What you should understand by the end
+MP2 brings together six major web-programming skills:
+Concept                        What you should be able to explain
+React                          How components, props, and state work
+TypeScript                     How interfaces describe API data
+Axios / HTTP                   How to retrieve JSON from an external service
+Data transformations           How searching, filtering, and sorting work
+React Router                   How URLs select different pages and resources
+Deployment                     How a Vite project becomes a public website
+The most important architectural idea is:
+API data → TypeScript data model → React state → user interactions → rendered
+components.
+Once you understand that pipeline, you understand the core of MP2, rather than just how to
+copy an implementation.
+Scope note: This walkthrough is based on the MP2 requirements and Pokémon Explorer choice
+from our earlier work, plus the current public API and Vite documentation. I haven't
+independently checked every detail against the official MP2 grading rubric, so treat the file
+architecture and implementation sequence as guidance rather than additional confirmed course
+requirements.",3-14,Explain MP2 Situation.pdf
+Explain MP2 Situation,5,user,"teach me all the basic knowledge of the language I would use and
+                              some template code",14-15,Explain MP2 Situation.pdf
+Explain MP2 Situation,6,assistant,"CS409 MP2 — Learn React, TypeScript, JavaScript, HTML, CSS, and API
+Programming from Zero
+I'll teach you the languages and technologies you need to understand and build your Pokémon
+Explorer MP2, with explanations, examples, and reusable template code.
+Since you already have programming experience, I'll focus on what is different about web
+programming rather than spending too much time on concepts like loops and functions.
+By the end, you should understand how to write a React application yourself, request data from
+an API, build interactive pages, and deploy the result.
+1. The technology stack
+Your project uses several technologies, but you don't need to learn six completely different
+programming languages.
+Technology         What it does                                      Importance
+HTML               Defines webpage structure                         Essential basics
+CSS                Controls appearance and layout                    Essential basics
+JavaScript         Adds logic and interactivity                      Very important
+TypeScript         Adds static types to JavaScript                   Very important
+React              Builds interactive user interfaces                Most important
+Axios              Sends HTTP requests to APIs                       Important
+React Router       Controls navigation between pages                 Important
+Vite               Runs and builds your project                      Basic understanding
+Technically, TypeScript is a programming language, React is a library, and Vite is a build tool.
+Here's the relationship:
+
+                                    Your Pokémon Website
+
+                                     What the user sees in the browser
+
+               React                           TypeScript                          CSS
+         UI & interactions                    Logic & types                     Appearance
+
+                                           Axios + PokéAPI
+                                          Requests and JSON data
+       Vite provides the development server and production build tooling around this application.
+
+2. JavaScript fundamentals
+JavaScript is the foundation of React and TypeScript. You need to be comfortable reading
+JavaScript before moving into React.
+2.1 Variables: let and const
+const name = ""Pikachu"";
+let level = 25;
+let isFavorite = true;
+
+
+level = 26;                  // Allowed
+// name = ""Eevee"";           // Error
+
+
+    const  : the variable cannot be reassigned.
+    let : the variable can be reassigned.
+    var : older style; generally avoid it in new code.
+
+Important nuance: const does not make objects immutable.
+const pokemon = { name: ""Pikachu"", level: 25 };
+
+
+pokemon.level = 26; // Allowed
+
+2.2 Arrays and objects
+An array stores a collection of values.
+const names = [""Pikachu"", ""Eevee"", ""Bulbasaur""];
+
+
+console.log(names[0]);        // Pikachu
+console.log(names.length); // 3
+
+
+An object stores named properties.
+const pokemon = {
+     id: 25,
+     name: ""Pikachu"",
+     type: ""Electric"",
+     weight: 6
+};
+
+
+console.log(pokemon.name);            // Pikachu
+console.log(pokemon[""type""]); // Electric
+
+
+Objects are especially important because API responses are commonly represented as JSON
+objects.
+2.3 Functions and arrow functions
+Traditional function:
+function double(x) {
+     return x * 2;
+}
+
+
+Arrow function:
+const double = (x) => {
+     return x * 2;
+};
+
+Short form:
+const double = x => x * 2;
+
+
+These examples compute the same result, although arrow functions and ordinary functions
+differ in how they handle this and some other language features.
+You'll see arrow functions everywhere in React.
+2.4 The four most important array methods
+These four methods are extremely useful in MP2.
+A. map() — transform every item
+const nums = [1, 2, 3];
+const doubled = nums.map(x => x * 2);
+
+
+// [2, 4, 6]
+
+
+map()  creates a new array by applying a function to each item.
+B. filter() — keep matching items
+const nums = [1, 2, 3, 4, 5];
+const large = nums.filter(x => x > 3);
+
+
+// [4, 5]
+
+
+In MP2, you could use this to retain Pokémon matching a search or type filter.
+C. find() — return the first match
+const nums = [10, 20, 30];
+const result = nums.find(x => x > 15);
+
+
+// 20
+
+
+If nothing matches, it returns undefined .
+
+D. sort() — order items
+const nums = [10, 2, 30];
+
+
+nums.sort((a, b) => a - b);
+// [2, 10, 30]
+
+
+The comparator returns a negative number when a should come before b , a positive number
+when b should come first, and zero when they are equivalent for sorting.
+Warning: .sort() mutates its array, so use a copy when sorting React state:
+const sorted = [...nums].sort((a, b) => a - b);
+
+
+
+2.5 Destructuring
+Destructuring extracts values from objects or arrays.
+const pokemon = {
+     id: 25,
+     name: ""Pikachu"",
+     weight: 6
+};
+
+
+const { name, weight } = pokemon;
+
+
+console.log(name);        // Pikachu
+console.log(weight); // 6
+
+
+Array destructuring:
+const coordinates = [10, 20];
+const [x, y] = coordinates;
+
+
+You'll use this exact syntax in React:
+const [count, setCount] = useState(0);
+
+The first variable holds the current state value. The second is a function for updating that value.
+2.6 Spread syntax
+The ... syntax copies or combines array elements or object properties.
+const original = [1, 2, 3];
+const copy = [...original];
+
+
+const pokemon = { name: ""Pikachu"", level: 5 };
+
+
+const updated = {
+     ...pokemon,
+     level: 10
+};
+
+
+This matters because React state should generally be updated without mutating the existing
+object or array.
+2.7 Template strings
+Template strings use backticks and ${...} .
+const name = ""Pikachu"";
+const id = 25;
+
+
+const message = `Pokemon ${name} has ID ${id}`;
+
+
+They are useful for API endpoints and dynamic text.
+const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+
+
+
+3. TypeScript fundamentals
+TypeScript is JavaScript with a static type system. It helps catch mistakes before the browser
+runs your code.
+
+3.1 Basic types
+let name: string = ""Pikachu"";
+let level: number = 25;
+let isLegendary: boolean = false;
+
+
+let types: string[] = [""Electric""];
+let stats: number[] = [35, 55, 40];
+
+
+TypeScript checks assignments:
+let level: number = 25;
+
+
+// level = ""twenty-five"";        // Type error
+
+
+
+3.2 TypeScript interfaces
+Interfaces describe the expected structure of an object.
+interface Pokemon {
+     id: number;
+     name: string;
+     weight: number;
+     types: string[];
+}
+
+
+Now you can write:
+const pikachu: Pokemon = {
+     id: 25,
+     name: ""Pikachu"",
+     weight: 60,
+     types: [""electric""]
+};
+
+
+If you forget a required property or provide the wrong type, TypeScript reports an error.
+
+Be careful about units: PokéAPI reports weight in hectograms and height in decimeters. A value
+of 60 for Pikachu means 6 kilograms, not 60 kilograms.
+3.3 Optional properties
+Sometimes an API field may be missing.
+interface Pokemon {
+    id: number;
+    name: string;
+    image?: string;
+}
+
+
+The ? means image is optional.
+You can safely access it using a fallback:
+const imageUrl = pokemon.image ?? ""/placeholder.png"";
+
+
+??   uses the right-hand value when the left-hand value is null or undefined .
+3.4 Union types
+A union allows several specific values.
+type SortDirection = ""asc"" | ""desc"";
+
+
+let direction: SortDirection = ""asc"";
+
+
+This prevents invalid values such as ""upwards"" .
+3.5 Function types
+function formatName(name: string): string {
+    return name.toUpperCase();
+}
+
+
+function getNextId(id: number): number {
+
+    return id + 1;
+}
+
+
+The type after the parameter name describes the input; the type after the closing parenthesis
+describes the return value.
+3.6 Why .tsx files exist
+     .ts : TypeScript without JSX.
+     .tsx : TypeScript containing JSX syntax, commonly used for React components.
+
+For example, a React component returning <h1>Hello</h1> belongs in a .tsx file.
+4. HTML and JSX
+HTML defines the structure of a webpage.
+<h1>Pokémon Explorer</h1>
+<p>Explore your favorite Pokémon.</p>
+<button>Search</button>
+
+
+React uses JSX, which resembles HTML but is written inside JavaScript or TypeScript.
+function Welcome() {
+    const name = ""Pikachu"";
+
+
+    return (
+         <div>
+           <h1>Hello, {name}!</h1>
+           <p>Welcome to Pokémon Explorer.</p>
+         </div>
+    );
+}
+
+
+Important JSX rules:
+    Use className instead of HTML's class .
+    Put JavaScript expressions inside {} .
+    Return one root element, or use a fragment <>...</> .
+
+   Close all JSX tags.
+   Use onClick rather than HTML's lowercase onclick .
+Example:
+function Greeting() {
+    return (
+         <section className=""greeting"">
+           <h2>Hello!</h2>
+           <button onClick={() => alert(""Clicked!"")}>
+            Click me
+           </button>
+         </section>
+    );
+}
+
+
+
+5. CSS essentials
+CSS controls how HTML elements appear.
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+
+h1 {
+    color: #2563eb;
+}
+
+
+.card {
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+
+
+A CSS class begins with a dot when written in the stylesheet:
+
+.pokemon-card {
+    background: white;
+}
+
+
+In JSX, you apply it through className :
+<div className=""pokemon-card"">
+    Pikachu
+</div>
+
+
+
+Flexbox
+Flexbox is good for navigation bars and horizontal layouts.
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+
+
+CSS Grid
+Grid is especially useful for a Pokémon gallery.
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+
+For responsive layouts:
+.gallery {
+    display: grid;
+    grid-template-columns:
+      repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 20px;
+}
+
+
+This lets the browser automatically adjust the number of columns depending on available width.
+6. React fundamentals — The most important part
+React lets you describe how an interface should look based on its current data.
+Instead of manually changing the HTML every time something happens, you update state, and
+React renders the updated interface.
+6.1 Your first component
+function PokemonCard() {
+    return (
+         <div>
+           <h2>Pikachu</h2>
+           <p>Type: Electric</p>
+         </div>
+    );
+}
+
+
+export default PokemonCard;
+
+
+What each part means:
+         function PokemonCard()    defines the component.
+         return (...) describes the interface.
+         <div> , <h2> , and <p> are JSX elements.
+         export default allows the component to be imported by another file.
+
+
+6.2 Props — Pass data into components
+Hardcoding Pikachu inside every card wouldn't be useful.
+Instead, use props.
+interface PokemonCardProps {
+    name: string;
+
+    type: string;
+}
+
+
+function PokemonCard({ name, type }: PokemonCardProps) {
+    return (
+         <div>
+           <h2>{name}</h2>
+           <p>Type: {type}</p>
+         </div>
+    );
+}
+
+
+Now a parent component can reuse it:
+<PokemonCard name=""Pikachu"" type=""Electric"" />
+<PokemonCard name=""Charmander"" type=""Fire"" />
+
+
+This is conceptually similar to calling a function with different arguments.
+6.3 useState — Make the interface interactive
+A regular local variable does not preserve component state across React renders.
+useState solves this.
+
+
+import { useState } from ""react"";
+
+
+function Counter() {
+    const [count, setCount] = useState(0);
+
+
+    return (
+         <div>
+           <p>Count: {count}</p>
+
+
+           <button onClick={() => setCount(c => c + 1)}>
+            Increase
+           </button>
+         </div>
+    );
+}
+
+export default Counter;
+
+
+Try the same behavior here:
+                                               0
+                              Decrease           Increase Reset
+                          Changing state produces a new rendered value.
+Here's what happens when you click Increase:
+  1. The event handler calls setCount .
+  2. React schedules an update.
+  3. React calls the component again with its updated state.
+  4. The interface displays the new count.
+Notice that state setters do not immediately change the value captured by the currently
+executing function.
+6.4 Controlled inputs
+A search field should update React state when the user types.
+import { useState } from ""react"";
+
+
+function SearchExample() {
+  const [search, setSearch] = useState("""");
+
+
+  return (
+    <div>
+       <input
+         value={search}
+         onChange={e => setSearch(e.target.value)}
+         placeholder=""Search...""
+       />
+
+
+       <p>You typed: {search}</p>
+    </div>
+
+    );
+}
+
+
+There are two important connections:
+ value={search} makes the input display the current state.
+
+ onChange={...} updates that state when the user types.
+
+Together, these form a controlled input.
+6.5 Conditional rendering
+Sometimes you only want to show an element when a condition is true.
+function Status({ loading }: { loading: boolean }) {
+    if (loading) {
+         return <p>Loading...</p>;
+    }
+
+
+    return <p>Data loaded successfully!</p>;
+}
+
+
+Another form:
+{error && <p>Something went wrong.</p>}
+
+
+This is useful for API error messages, loading indicators, and empty search results.
+6.6 Rendering an array
+React commonly uses .map() to convert data into UI elements.
+const names = [""Pikachu"", ""Eevee"", ""Charmander""];
+
+
+function PokemonList() {
+    return (
+         <ul>
+           {names.map(name => (
+
+            <li key={name}>{name}</li>
+           ))}
+         </ul>
+    );
+}
+
+
+The key helps React identify each item between renders. Prefer a stable unique Pokémon ID
+when available.
+7. Asynchronous programming — async , await , and Promises
+This is one of the most important topics for API programming.
+Imagine requesting Pokémon data from a remote server. The response is not immediately
+available.
+JavaScript handles this with asynchronous operations.
+7.1 Promise
+A Promise represents a result that may become available later.
+const promise = fetch(""https://pokeapi.co/api/v2/pokemon/25"");
+
+
+The request returns a Promise rather than the Pokémon JSON directly.
+7.2 async and await
+async function loadPokemon() {
+    const response = await fetch(
+         ""https://pokeapi.co/api/v2/pokemon/25""
+    );
+
+
+    if (!response.ok) {
+         throw new Error(""HTTP request failed"");
+    }
+
+
+    const data = await response.json();
+
+    console.log(data.name);
+}
+
+
+        async  declares an asynchronous function.
+        await pauses that function until the Promise settles.
+        Other JavaScript tasks can continue while the operation is pending.
+        response.json() also returns a Promise.
+
+
+7.3 try , catch , and finally
+Network requests can fail.
+async function loadPokemon() {
+    try {
+        const response = await fetch(
+             ""https://pokeapi.co/api/v2/pokemon/25""
+        );
+
+
+        if (!response.ok) {
+             throw new Error(`HTTP error: ${response.status}`);
+        }
+
+
+        const data = await response.json();
+        console.log(data.name);
+    } catch (error) {
+        console.error(""Failed to load Pokémon:"", error);
+    } finally {
+        console.log(""Request finished"");
+    }
+}
+
+
+finally   executes whether the request succeeds or fails.
+For MP2, you will typically connect this to loading and error state.
+8. Axios — Communicating with an API
+Axios is an HTTP client library that simplifies network requests.
+Install it in an existing npm project:
+
+npm install axios
+
+
+
+8.1 Basic GET request
+import axios from ""axios"";
+
+
+async function getPokemon(id: number) {
+    const response = await axios.get(
+         `https://pokeapi.co/api/v2/pokemon/${id}`
+    );
+
+
+    return response.data;
+}
+
+
+Unlike native fetch , Axios places parsed response data in response.data .
+8.2 Typed API response
+A useful reusable template:
+import axios from ""axios"";
+
+
+interface ExampleData {
+    id: number;
+    name: string;
+}
+
+
+async function getData(id: number): Promise<ExampleData> {
+    const response = await axios.get<ExampleData>(
+         `https://example.com/api/items/${id}`
+    );
+
+
+    return response.data;
+}
+
+
+The <ExampleData> describes the expected response type. It helps TypeScript check your
+code, but it does not validate the response at runtime. Promise based…
+
+8.3 Promise.all()
+Suppose you want several records.
+async function getMultiple(ids: number[]) {
+    const requests = ids.map(id =>
+         axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+    );
+
+
+    const responses = await Promise.all(requests);
+
+
+    return responses.map(response => response.data);
+}
+
+
+Instead of waiting for each request sequentially, Promise.all() allows the requests to
+proceed concurrently.
+Important: a single rejected request causes Promise.all() to reject. For larger datasets, use
+appropriate batching, concurrency limits, or partial-failure handling.
+9. useEffect — Connect React to external data
+useEffect    is commonly used to synchronize a React component with external systems,
+including network requests.
+Here is a generic example you can adapt to your own API.
+import { useEffect, useState } from ""react"";
+import axios from ""axios"";
+
+
+interface Item {
+    id: number;
+    title: string;
+}
+
+
+function ExamplePage() {
+    const [item, setItem] = useState<Item | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("""");
+
+    useEffect(() => {
+      let active = true;
+
+
+      async function loadItem() {
+           try {
+               const response = await axios.get<Item>(
+                    ""https://jsonplaceholder.typicode.com/todos/1""
+               );
+
+
+               if (active) {
+                    setItem(response.data);
+               }
+           } catch {
+               if (active) {
+                    setError(""Unable to load the item."");
+               }
+           } finally {
+               if (active) {
+                    setLoading(false);
+               }
+           }
+      }
+
+
+      loadItem();
+
+
+      return () => {
+           active = false;
+      };
+    }, []);
+
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+
+
+    return <h1>{item?.title}</h1>;
+}
+
+
+The example uses a public placeholder endpoint, not the MP2 solution.
+The critical syntax is:
+
+useEffect(() => {
+    // Synchronize with an external system.
+}, []);
+
+
+The empty dependency array means the effect is not rerun because of changing component
+state or props. In development, React Strict Mode may still run an extra setup/cleanup cycle to
+help reveal bugs.
+If the effect depends on a changing ID, that ID belongs in the dependency array.
+The active cleanup guard prevents an outdated request from updating state after cleanup,
+though it does not cancel the network request itself.
+10. React Router — Multiple pages
+React Router lets the browser URL determine which component is displayed.
+A generic example using the declarative React Router API:
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Link
+} from ""react-router"";
+
+
+function Home() {
+    return <h1>Home page</h1>;
+}
+
+
+function About() {
+    return <h1>About page</h1>;
+}
+
+
+function App() {
+    return (
+      <BrowserRouter>
+           <nav>
+            <Link to=""/"">Home</Link>
+            <Link to=""/about"">About</Link>
+
+           </nav>
+
+
+           <Routes>
+            <Route path=""/"" element={<Home />} />
+            <Route path=""/about"" element={<About />} />
+           </Routes>
+         </BrowserRouter>
+    );
+}
+
+
+export default App;
+
+
+In older React Router versions you may see imports from react-router-dom . Use the imports
+compatible with the version installed in your project.
+Dynamic route parameters
+Suppose you define:
+<Route path=""/items/:id"" element={<ItemPage />} />
+
+
+The :id segment is dynamic.
+You can read it using useParams :
+import { useParams } from ""react-router"";
+
+
+function ItemPage() {
+    const { id } = useParams();
+
+
+    return <h1>Item ID: {id}</h1>;
+}
+
+
+useParams()     returns route parameters as strings, or undefined when absent. Validate them
+before treating them as numbers. React Router +1
+For a Pokémon detail page, the same concept allows one reusable React component to display
+many different Pokémon.
+
+11. A complete practice template
+Now let's combine the concepts into a small standalone React application.
+This example deliberately uses a small hardcoded dataset instead of implementing your MP2
+requirements. It demonstrates reusable components, TypeScript, state, search, sorting, and
+CSS.
+You can use it to practice the programming concepts before building your actual assignment.
+File 1 — App.tsx
+
+import { useState } from ""react"";
+import ""./App.css"";
+
+
+interface Item {
+     id: number;
+     name: string;
+     price: number;
+}
+
+
+const initialItems: Item[] = [
+     { id: 1, name: ""Apple"", price: 3 },
+     { id: 2, name: ""Banana"", price: 1 },
+     { id: 3, name: ""Orange"", price: 2 }
+];
+
+
+interface ItemCardProps {
+     item: Item;
+}
+
+
+function ItemCard({ item }: ItemCardProps) {
+     return (
+          <div className=""card"">
+            <h2>{item.name}</h2>
+            <p>Price: ${item.price}</p>
+          </div>
+     );
+}
+
+export default function App() {
+    const [search, setSearch] = useState("""");
+    const [ascending, setAscending] = useState(true);
+
+
+    const visibleItems = initialItems
+         .filter(item =>
+              item.name.toLowerCase().includes(search.toLowerCase())
+         )
+         .sort((a, b) =>
+              ascending ? a.price - b.price : b.price - a.price
+         );
+
+
+    return (
+         <main className=""container"">
+              <h1>My Item Explorer</h1>
+
+
+              <input
+               value={search}
+               onChange={e => setSearch(e.target.value)}
+               placeholder=""Search items...""
+              />
+
+
+              <button onClick={() => setAscending(!ascending)}>
+               Sort: {ascending ? ""Low to High"" : ""High to Low""}
+              </button>
+
+
+              <div className=""grid"">
+               {visibleItems.map(item => (
+                   <ItemCard key={item.id} item={item} />
+               ))}
+              </div>
+         </main>
+    );
+}
+
+
+
+File 2 — App.css
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+
+    background: #f4f5f7;
+}
+
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+
+input, button {
+    padding: 10px 14px;
+    margin: 6px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+.grid {
+    display: grid;
+    grid-template-columns:
+      repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+
+.card {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #00000012;
+}
+
+
+
+What the template looks like
+Here is an interactive version of the core behavior.
+
+ My Item Explorer
+    Search items...                                                                   Low to High
+
+                🍌                               🍊                                 🍎
+              Banana                          Orange                             Apple
+                $1                              $2                                $3
+
+When you type or click the sort button, React derives a new list from the current state.
+Notice that the data is not stored again in a separate visibleItems state variable. It is
+calculated from the original data plus the search and sorting state. For a small collection, this is
+simple and efficient.
+12. Running the practice project in VS Code
+First, check whether Node.js and npm are installed:
+node -v
+npm -v
+
+
+For a separate practice project, create a Vite React + TypeScript application:
+npm create vite@latest react-practice -- --template react-ts
+
+
+cd react-practice
+
+
+npm install
+
+
+npm run dev
+
+
+Open the local URL printed in your terminal. Then replace the practice project's src/App.tsx
+and src/App.css with the examples above.
+For your existing MP2 repository, do not recreate the project or overwrite existing files. Use
+its existing package configuration and scripts.
+
+Useful commands:
+Command                                    Purpose
+npm install                                Install project dependencies
+npm run dev                                Start local development server
+npm run build                              Create production build
+npm run preview                            Preview production build
+git status                                 See changed files
+git add .                                  Stage changes
+git commit -m ""...""                        Commit changes
+git push                                   Push to remote repository
+Vite requires a build step before GitHub Pages can serve the production application; for a
+repository named mp2 , a project-site deployment normally requires base: ""/mp2/"" . Vite
+13. The most common mistakes
+Understanding these will save you considerable debugging time.
+Mistake                           Why it's wrong                     Correct idea
+onClick={handleClick()}           Calls the function while rendering onClick={handleClick}
+array.sort(...)     on state      Mutates the original state array   Sort a copied array
+Forgetting key in .map()          React cannot reliably track list   Use a stable unique ID
+                                  identity
+Using = instead of === in         Assignment instead of strict       Use ===
+comparisons                       comparison
+Calling hooks inside conditions   Breaks React's hook ordering rules Call hooks at component top
+                                                                     level
+Accessing data before it loads    May cause runtime errors           Handle null , loading, and
+                                                                     errors
+Using .map() on a non-array       Runtime error                      Check the API response shape
+
+Ignoring rejected Promises          Errors become unhandled          Use try/catch
+React's official guidance is to treat arrays and objects in state as immutable and produce
+updated copies instead of changing existing state values. React
+14. Test yourself before moving to MP2
+Try these questions without referring to the previous examples.
+ Fundamentals quiz                                                                    5 questions
+ 1. What does .filter() return?
+     One matching element
+     A new array of matching elements
+     A sorted array
+     A Boolean
+
+ 2. What does useState() return?
+     A Promise
+     A component
+     A state value and setter function
+     An HTML element
+
+ 3. Which syntax reads a dynamic URL parameter?
+     useState()
+     useParams()
+     useEffect()
+     axios.get()
+
+ 4. What is the purpose of await?
+
+       Stop the entire browser
+       Make CSS load
+       Wait for a Promise within an async function
+       Convert JavaScript to TypeScript
+
+  5. Why use TypeScript interfaces?
+      To style HTML
+      To define expected object structures
+      To start a server
+      To make HTTP requests
+                                          Check answers
+
+15. What to learn next for your MP2
+Now that you've seen the fundamentals, I recommend studying them in this order:
+  1. JavaScript array operations — map , filter , sort , find , includes .
+  2. TypeScript interfaces and types — modeling Pokémon API responses.
+  3. React props and state — making reusable cards and interactive inputs.
+  4. API requests and asynchronous programming — retrieving remote data safely.
+  5. React Router — creating list, gallery, and detail views.
+  6. CSS Flexbox and Grid — creating responsive layouts.
+  7. Error handling, testing, and deployment — turning a prototype into a reliable application.
+The three ideas I would prioritize above everything else are React state, array transformations,
+and async/await. Those are what connect user interaction, API data, and the visual interface.
+Once you can explain and modify the practice template without assistance, you'll have the
+foundation to implement your own MP2 features rather than memorizing a completed solution.",15-43,Explain MP2 Situation.pdf
+Explain MP2 Situation,7,user,thank you! I know how to do it!,43-44,Explain MP2 Situation.pdf
+Explain MP2 Situation,8,assistant,"You're welcome! Glad it clicked! 🎉
+You now have the foundation to understand how React, TypeScript, APIs, and routing work
+together.
+Good luck with CS409! Keep building and experimenting—that's how these concepts really
+stick.",44,Explain MP2 Situation.pdf
