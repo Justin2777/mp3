@@ -6,7 +6,7 @@
 // The autograder cannot reach localhost, so API_URL must be your deployed URL.
 // Requires Node 24 (LTS).
 
-const API_URL = "https://YOUR-APP-NAME.onrender.com"; // <-- change this to your deployed API's URL
+const API_URL = "https://mp3-0vxy.onrender.com"; // <-- change this to your deployed API's URL
 
 // Grader URL; DO NOT CHANGE.
 const AUTOGRADER_URL = "https://cs409-mp3-grader.onrender.com";
