@@ -1,17 +1,8 @@
-// Self-check your MP3 against the course autograder.
-//
-// 1. Deploy your API (e.g. on Render) and set API_URL below to its base URL.
-// 2. Run:  npm run submit    (or: node submit.js)
-//
-// The autograder cannot reach localhost, so API_URL must be your deployed URL.
-// Requires Node 24 (LTS).
+const API_URL = "https://mp3-0vxy.onrender.com";
 
-const API_URL = "https://mp3-0vxy.onrender.com"; // <-- change this to your deployed API's URL
-
-// Grader URL; DO NOT CHANGE.
 const AUTOGRADER_URL = "https://cs409-mp3-grader.onrender.com";
 
-const TIMEOUT_MS = 6 * 60 * 1000; // a free-tier Render app may need a minute to wake up
+const TIMEOUT_MS = 6 * 60 * 1000;
 
 function fail(message) {
     console.error(`\n${message}\n`);
